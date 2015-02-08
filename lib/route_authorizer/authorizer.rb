@@ -10,8 +10,12 @@ module RouteAuthorizer::Authorizer
 
 private
 
+  def permission
+    @permission ||= ::Permission.new(current_user.role)
+  end
+
   def can_redirect_to?(_controller_name, _action_name)
-    Permission.new(current_user.role).redirect_to?(_controller_name, _action_name) if current_user
+    permission.redirect_to?(_controller_name, _action_name) if current_user
   end
 
   def can_redirect_to_path?(path)
@@ -26,3 +30,5 @@ private
   end
 
 end
+
+ActionController::Base.include(RouteAuthorizer::Authorizer)
