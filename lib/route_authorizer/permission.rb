@@ -1,7 +1,7 @@
 module RouteAuthorizer::Permission
 
   def initialize(role)
-    @role = role
+    @role = role.to_s
   end
 
   def redirect_to?(controller_name, action_name)

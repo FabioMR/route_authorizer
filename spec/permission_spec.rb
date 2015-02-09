@@ -2,13 +2,22 @@ require 'spec_helper'
 
 describe RouteAuthorizer::Permission do
 
+  before do
+    @role = :admin
+  end
+
   let(:permission_class) do
     klass = Class.new
     klass.include(RouteAuthorizer::Permission)
     klass
   end
 
-  let(:permission) { permission_class.new(:admin) }
+  let(:permission) { permission_class.new(@role) }
+
+  it 'returns no permission for no role' do
+    @role = nil
+    expect(permission.send(:role_permissions)).to eq([])
+  end
 
   it 'returns no permission by default' do
     expect(permission.send(:role_permissions)).to eq([])
