@@ -11,11 +11,11 @@ module RouteAuthorizer::Authorizer
 private
 
   def permission
-    @permission ||= ::Permission.new(current_user.role)
+    @permission ||= ::Permission.new(current_user.try(:role))
   end
 
   def can_redirect_to?(_controller_name, _action_name)
-    permission.redirect_to?(_controller_name, _action_name) if current_user
+    permission.redirect_to?(_controller_name, _action_name)
   end
 
   def can_redirect_to_path?(path)
@@ -25,7 +25,7 @@ private
 
   def authorize_user!
     unless can_redirect_to?(controller_name, action_name)
-      raise AccessDenied.new("Acess denied to '#{controller_name}##{action_name}'") if current_user
+      raise AccessDenied.new("Acess denied to '#{controller_name}##{action_name}'")
     end
   end
 
