@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-Permission = Object.new
+Permission = Class.new
 
 describe RouteAuthorizer::Authorizer do
 
   let(:role) { :admin }
   let(:current_user) { double('User', role: role) }
-  let(:permission) { double('permission', redirect_to?: true) }
+  let(:permission) { double('permission', permit?: true) }
   let(:controller) { ActionController::Base.new }
 
   before do
@@ -40,7 +40,7 @@ describe RouteAuthorizer::Authorizer do
 
   context 'when user has permission' do
     before do
-      expect(permission).to receive(:redirect_to?).with(:controller, :action) { true }
+      expect(permission).to receive(:permit?).with(:controller, :action) { true }
     end
 
     it 'raises no exception' do
@@ -50,7 +50,7 @@ describe RouteAuthorizer::Authorizer do
 
   context 'when user does not have permission' do
     before do
-      expect(permission).to receive(:redirect_to?).with(:controller, :action) { false }
+      expect(permission).to receive(:permit?).with(:controller, :action) { false }
     end
 
     it 'raises AccessDenied exception' do
@@ -58,15 +58,15 @@ describe RouteAuthorizer::Authorizer do
     end
   end
 
-  it '#can_redirect_to?' do
-    expect(permission).to receive(:redirect_to?).with(:other_controller, :other_action)
-    controller.send(:can_redirect_to?, :other_controller, :other_action)
+  it '#permit?' do
+    expect(permission).to receive(:permit?).with(:other_controller, :other_action)
+    controller.send(:permit?, :other_controller, :other_action)
   end
 
-  it '#can_redirect_to_path?' do
+  it '#permit_path?' do
     expect(Rails).to receive_message_chain(:application, :routes, :recognize_path).with('path') { {a: 1, b: 2, c: 3} }
-    expect(permission).to receive(:redirect_to?).with(1, 2)
-    controller.send(:can_redirect_to_path?, 'path')
+    expect(permission).to receive(:permit?).with(1, 2)
+    controller.send(:permit_path?, 'path')
   end
 
 end

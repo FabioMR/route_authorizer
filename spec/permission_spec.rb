@@ -37,20 +37,20 @@ describe RouteAuthorizer::Permission do
 
   it 'permits define permission to all controllers and actions' do
     allow(permission).to receive(:admin).and_return [[:all]]
-    expect(permission.redirect_to? :any, :any).to be_truthy
+    expect(permission.permit? :any, :any).to be_truthy
   end
 
   it 'permits define permission to a specific controller and all actions' do
     allow(permission).to receive(:admin).and_return [[:some, :all]]
-    expect(permission.redirect_to? :some, :any).to be_truthy
-    expect(permission.redirect_to? :other, :any).to be_falsey
+    expect(permission.permit? :some, :any).to be_truthy
+    expect(permission.permit? :other, :any).to be_falsey
   end
 
   it 'permits define permission to a specific controller and action' do
     allow(permission).to receive(:admin).and_return [[:some, :some]]
-    expect(permission.redirect_to? :some, :some).to be_truthy
-    expect(permission.redirect_to? :some, :any).to be_falsey
-    expect(permission.redirect_to? :any, :any).to be_falsey
+    expect(permission.permit? :some, :some).to be_truthy
+    expect(permission.permit? :some, :any).to be_falsey
+    expect(permission.permit? :any, :any).to be_falsey
   end
 
 end

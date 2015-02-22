@@ -4,8 +4,8 @@ module RouteAuthorizer::Permission
     @role = role.to_s
   end
 
-  def redirect_to?(controller_name, action_name)
-    redirect_to_action? [
+  def permit?(controller_name, action_name)
+    permit_action? [
       [:all],
       [controller_name.to_sym, :all],
       [controller_name.to_sym, action_name.to_sym],
@@ -16,7 +16,7 @@ private
 
   attr_reader :role
 
-  def redirect_to_action?(role_action)
+  def permit_action?(role_action)
     (role_permissions & role_action).any?
   end
 
