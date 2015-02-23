@@ -3,14 +3,10 @@ require 'spec_helper'
 describe RouteAuthorizer::PermissionDSL do
 
   let(:permission_class) { Class.new }
-  let(:permission) { permission_class.new(:admin) }
+  let(:permission) { permission_class.new }
 
   before do
     permission_class.include(RouteAuthorizer::PermissionDSL)
-  end
-
-  it 'includes permission module' do
-    expect(permission_class).to include RouteAuthorizer::Permission
   end
 
   it '.all_roles' do

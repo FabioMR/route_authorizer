@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-Permission = Class.new
-
 describe RouteAuthorizer::Authorizer do
 
   let(:role) { :admin }

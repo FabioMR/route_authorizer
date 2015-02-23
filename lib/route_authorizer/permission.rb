@@ -1,4 +1,6 @@
-module RouteAuthorizer::Permission
+class RouteAuthorizer::Permission
+
+  include RouteAuthorizer::PermissionDSL
 
   def initialize(role)
     @role = role.to_s

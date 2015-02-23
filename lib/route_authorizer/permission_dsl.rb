@@ -2,8 +2,6 @@ module RouteAuthorizer::PermissionDSL
 
   extend ActiveSupport::Concern
 
-  include RouteAuthorizer::Permission
-
   class_methods do
     def all_roles(&block)
       role(:default, &block)
