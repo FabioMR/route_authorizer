@@ -4,5 +4,6 @@ module RouteAuthorizer
 
   require 'route_authorizer/version'
   require 'route_authorizer/permission'
+  require 'route_authorizer/permission_dsl'
   require 'route_authorizer/authorizer'
 end
