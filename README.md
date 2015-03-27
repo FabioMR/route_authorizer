@@ -1,10 +1,10 @@
 # RouteAuthorizer
 
-TODO: Write a gem description
+Simple routes authorization solution for Rails based on user roles. All permissions are defined in a single location (the Permission class) and not duplicated across your code.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add in your Gemfile:
 
     gem 'route_authorizer'
 
@@ -12,13 +12,47 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Create Permission file (`app/models/permission.rb`)
 
-    $ gem install route_authorizer
+    rails g route_authorizer:permission
 
 ## Usage
 
-TODO: Write usage instructions here
+RouteAuthorizer expects a +current_user+ method to exist in the controller. The +current_user+ needs a +role+ method.
+
+### 1. Checking permissions
+
+Add in your ApplicationController.rb
+
+    before_action :authorize_user!
+
+### 2. Defining permissions
+
+All permissions are defined at Permission file (`app/models/permission.rb`)
+
+To permit all roles to HomeController
+
+    all_roles do
+      permit :home
+    end
+
+Or to a specific action
+
+    all_roles do
+      permit :home, only: [:index]
+    end
+
+To permit admin (user with admin role) to do all functions
+
+    role :admin do
+      permit_all
+    end
+
+To permit customer (user with customer role) just to OrdersController
+
+    role :customer do
+      permit :orders
+    end
 
 ## Contributing
 
