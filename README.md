@@ -12,13 +12,13 @@ And then execute:
 
     $ bundle
 
-Create Permission file (`app/models/permission.rb`)
+Create Permission file `app/models/permission.rb`:
 
-    rails g route_authorizer:permission
+    rails g route_authorizer:install
 
 ## Usage
 
-RouteAuthorizer expects a +current_user+ method to exist in the controller. The +current_user+ needs a +role+ method.
+RouteAuthorizer expects a `current_user` method to exist in the controller. The `current_user` needs a `role` method.
 
 ### 1. Checking permissions
 
@@ -28,7 +28,7 @@ Add in your ApplicationController.rb
 
 ### 2. Defining permissions
 
-All permissions are defined at Permission file (`app/models/permission.rb`)
+All permissions are defined at Permission file `app/models/permission.rb`.
 
 To permit all roles to HomeController
 
@@ -54,9 +54,11 @@ To permit customer (user with customer role) just to OrdersController
       permit :orders
     end
 
+You can find a Permission sample [here](https://github.com/FabioMR/route_authorizer/blob/master/samples/permission.rb).
+
 ## Contributing
 
-1. Fork it ( http://github.com/<my-github-username>/route_authorizer/fork )
+1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
