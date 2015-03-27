@@ -10,8 +10,8 @@ describe RouteAuthorizer::Authorizer do
   before do
     allow(Permission).to receive(:new) { permission }
 
-    allow(controller).to receive(:controller_name) { :controller }
-    allow(controller).to receive(:action_name) { :action }
+    allow(controller).to receive(:controller_path) { 'controller' }
+    allow(controller).to receive(:action_name) { 'action' }
     allow(controller).to receive(:current_user) { current_user }
   end
 
@@ -37,28 +37,35 @@ describe RouteAuthorizer::Authorizer do
   end
 
   context 'when user has permission' do
-    before do
-      expect(permission).to receive(:permit?).with(:controller, :action) { true }
+    context 'with namespace' do
+      before do
+        allow(controller).to receive(:controller_path) { 'admin/controller' }
+      end
+
+      it 'raises no exception' do
+        expect(permission).to receive(:permit?).with('admin_controller', 'action') { true }
+        expect {controller.send(:authorize_user!)}.not_to raise_error
+      end
     end
 
-    it 'raises no exception' do
-      expect {controller.send(:authorize_user!)}.not_to raise_error
+    context 'without namespace' do
+      it 'raises no exception' do
+        expect(permission).to receive(:permit?).with('controller', 'action') { true }
+        expect {controller.send(:authorize_user!)}.not_to raise_error
+      end
     end
   end
 
   context 'when user does not have permission' do
-    before do
-      expect(permission).to receive(:permit?).with(:controller, :action) { false }
-    end
-
     it 'raises AccessDenied exception' do
+      expect(permission).to receive(:permit?).with('controller', 'action') { false }
       expect {controller.send(:authorize_user!)}.to raise_error(RouteAuthorizer::Authorizer::AccessDenied)
     end
   end
 
   it '#permit?' do
-    expect(permission).to receive(:permit?).with(:other_controller, :other_action)
-    controller.send(:permit?, :other_controller, :other_action)
+    expect(permission).to receive(:permit?).with('other_controller', 'other_action')
+    controller.send(:permit?, 'other_controller', 'other_action')
   end
 
   it '#permit_path?' do

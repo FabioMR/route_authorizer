@@ -6,11 +6,11 @@ class RouteAuthorizer::Permission
     @role = role.to_s
   end
 
-  def permit?(controller_name, action_name)
+  def permit?(controller_path, action_name)
     permit_action? [
       [:all],
-      [controller_name.to_sym, :all],
-      [controller_name.to_sym, action_name.to_sym],
+      [controller_path.to_sym, :all],
+      [controller_path.to_sym, action_name.to_sym],
     ]
   end
 

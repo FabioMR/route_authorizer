@@ -14,8 +14,8 @@ private
     @permission ||= ::Permission.new(current_user.try(:role))
   end
 
-  def permit?(_controller_name, _action_name)
-    permission.permit?(_controller_name, _action_name)
+  def permit?(_controller_path, _action_name)
+    permission.permit?(_controller_path, _action_name)
   end
 
   def permit_path?(path)
@@ -24,8 +24,8 @@ private
   end
 
   def authorize_user!
-    unless permit?(controller_name, action_name)
-      raise AccessDenied.new("Acess denied to '#{controller_name}##{action_name}'")
+    unless permit?(controller_path.to_s.gsub(/\//, "_"), action_name)
+      raise AccessDenied.new("Acess denied to '#{controller_path}##{action_name}'")
     end
   end
 
